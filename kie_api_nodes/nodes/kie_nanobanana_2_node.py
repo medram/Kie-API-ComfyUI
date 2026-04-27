@@ -38,16 +38,13 @@ class KieNanoBanana2Node:
     RETURN_NAMES = ("Image",)
     FUNCTION = "generate"
     CATEGORY = "Kie API Nodes/Images"
-    OUTPUT_IS_LIST = (True,)
+    # OUTPUT_IS_LIST = (True,)
     # INPUT_IS_LIST = True  # <--- THIS IS THE KEY
 
     def generate(
         self, prompt, image=None, resolution="1K", aspect_ratio="auto"
-    ) -> tuple[list[str]]:
+    ) -> tuple[str]:
         # Placeholder implementation - replace with actual API call
         return (
-            [
-                "https://fsn1.your-objectstorage.com/n8n-bucket/ytb/records/23/1773654208342-mpc70m8ovfp.png",
-                "https://fsn1.your-objectstorage.com/n8n-bucket/ytb/records/23/1773654208342-mpc70m8ovfp.png",
-            ],
+            "https://fsn1.your-objectstorage.com/n8n-bucket/ytb/records/23/1773654208342-mpc70m8ovfp.png",
         )
