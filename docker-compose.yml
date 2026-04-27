@@ -1,0 +1,29 @@
+services:
+  comfyui:
+    image: mrmed/comfyui-boot:cpu-dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: comfyui
+    restart: unless-stopped
+
+    ports:
+      - "8188:8188" # ComfyUI Web UI
+      - "8189:8189" # optional: extra API port
+
+    volumes:
+      # ⭐ Hot-development: your node code mounts directly in
+      - ./kie_api_nodes:/root/ComfyUI/custom_nodes/kie_api_nodes
+      # Persist models and output outside the container
+      # - ./models:/root/ComfyUI/models
+      - ./output:/root/ComfyUI/output
+
+    environment:
+      # - NVIDIA_VISIBLE_DEVICES=all
+      - CLI_ARGS=--listen 0.0.0.0 --port 8188 --cpu
+
+    # develop:
+    #   watch:
+    #     - action: sync+restart
+    #       path: ./kie_api_nodes
+    #       target: /root/ComfyUI/custom_nodes/kie_api_nodes
