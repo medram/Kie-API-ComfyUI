@@ -1,4 +1,8 @@
-from ..api.nanobanana_2_api import KieNanoBanana2API
+from typing import get_args
+
+from ..api.nanobanana_2_api import InputSchema, KieNanoBanana2API
+
+_fields = InputSchema.model_fields
 
 
 class KieNanoBanana2Node:
@@ -13,26 +17,13 @@ class KieNanoBanana2Node:
             },
             "optional": {
                 "image": ("IMAGE_URL",),
-                "resolution": (["1K", "2K", "4K"], {"default": "1K"}),
+                "resolution": (
+                    list(get_args(_fields["resolution"].annotation)),
+                    {"default": _fields["resolution"].default},
+                ),
                 "aspect_ratio": (
-                    [
-                        "1:1",
-                        "1:4",
-                        "1:8",
-                        "2:3",
-                        "3:2",
-                        "3:4",
-                        "4:1",
-                        "4:3",
-                        "4:5",
-                        "5:4",
-                        "8:1",
-                        "9:16",
-                        "16:9",
-                        "21:9",
-                        "auto",
-                    ],
-                    {"default": "auto"},
+                    list(get_args(_fields["aspect_ratio"].annotation)),
+                    {"default": _fields["aspect_ratio"].default},
                 ),
             },
         }
