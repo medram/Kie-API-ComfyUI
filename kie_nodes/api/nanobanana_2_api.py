@@ -52,6 +52,9 @@ class NanoBanana2Payload(BaseModel):
 
 
 class KieNanoBanana2API(KieAPI):
+    def node_name(self) -> str:
+        return "KieNanoBanana2Node"  # for logging purposes, to identify which node is making the API call
+
     def set_payload(self, payload: dict):
 
         # Validate and convert the input payload to the NanoBanana2Payload schema

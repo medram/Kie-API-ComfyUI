@@ -1,6 +1,7 @@
 import json
 import os
 import time
+from abc import abstractmethod
 from typing import Any, Literal
 
 import requests
@@ -35,7 +36,7 @@ class KieAPI(BaseModel):
             json=self._payload.model_dump(),
             headers={"Authorization": f"Bearer {get_api_key()}"},
         )
-        print("Create task response:", req.status_code, req.text)
+
         req.raise_for_status()
         if req.status_code == 200:
             self._task_id = req.json().get("data", {}).get("taskId")
@@ -43,9 +44,9 @@ class KieAPI(BaseModel):
                 raise ValueError(f"API did not return a taskId. Response: {req.text}")
         elif req.status_code in (401, 403):
             self._status = "failed"
-            print("Unauthorized: Check your API key.")
+            _log(f"[{self.node_name()}]: Unauthorized: Check your API key.")
 
-        _log("Created task with ID:", self._task_id)
+        _log(f"[{self.node_name()}]: Created task with ID:", self._task_id)
 
     def get_task_status(self):
         if self._task_id is None:
@@ -83,7 +84,7 @@ class KieAPI(BaseModel):
 
         while self._status == "pending" or self._status is None:
             self.get_task_status()
-            _log(f"Task {self._task_id}: generating...")
+            _log(f"[{self.node_name()}]: Task {self._task_id}: generating...")
             poll_count += 1
             progress = min(5 + poll_count * 5, 95)
             pbar.update_absolute(progress, 100)
@@ -91,6 +92,11 @@ class KieAPI(BaseModel):
 
         pbar.update_absolute(100, 100)
         return self._result
+
+    @abstractmethod
+    def node_name(self) -> str:
+        """Override this method in subclasses to return the name of the node for logging purposes."""
+        return "KieAPIBaseNode"
 
     # def get_result(self) -> dict | list | None:
     #     if self._status == "success":
