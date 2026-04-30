@@ -1,3 +1,9 @@
+from typing import cast
+
+from ..api.nanobanana_2_api import KieNanoBanana2API
+from ..log import _log
+
+
 class KieNanoBanana2Node:
     @classmethod
     def INPUT_TYPES(cls):
@@ -5,7 +11,7 @@ class KieNanoBanana2Node:
             "required": {
                 "prompt": (
                     "STRING",
-                    {"default": "Describe your image here...", "multiline": True},
+                    {"multiline": True},
                 ),
             },
             "optional": {
@@ -41,10 +47,22 @@ class KieNanoBanana2Node:
     # OUTPUT_IS_LIST = (True,)
     # INPUT_IS_LIST = True  # <--- THIS IS THE KEY
 
-    def generate(
-        self, prompt, image=None, resolution="1K", aspect_ratio="auto"
-    ) -> tuple[str]:
+    def generate(self, *args, **kwargs) -> tuple[str]:
         # Placeholder implementation - replace with actual API call
-        return (
-            "https://fsn1.your-objectstorage.com/n8n-bucket/ytb/records/23/1773654208342-mpc70m8ovfp.png",
-        )
+        payload = kwargs
+
+        nanobanana = KieNanoBanana2API()
+        nanobanana.set_payload(payload)
+
+        nanobanana.create_task()
+        result = cast(dict, nanobanana.wait_for_task_completion())
+
+        print("Final result from NanoBanana2 API:", result)
+        image: str = result.get("resultUrls", [""])[0] if result else ""
+
+        _log("Received result from NanoBanana2 API:", image)
+
+        # return (
+        #     "https://fsn1.your-objectstorage.com/n8n-bucket/ytb/records/23/1773654208342-mpc70m8ovfp.png",
+        # )
+        return (image,)

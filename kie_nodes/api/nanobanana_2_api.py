@@ -52,5 +52,16 @@ class NanoBanana2Payload(BaseModel):
 
 
 class KieNanoBanana2API(KieAPI):
-    def set_payload(self, payload: NanoBanana2Payload):
-        self._payload = payload
+    def set_payload(self, payload: dict):
+
+        # Validate and convert the input payload to the NanoBanana2Payload schema
+        valid_payload = NanoBanana2Payload(
+            input=payload
+        )  # This will raise a validation error if the payload is invalid
+        self._payload = valid_payload
+
+    def get_result(self) -> str:
+        """Returns the generated image URL."""
+        print(self._result)
+        return ""
+        # return self._result[0] if self._result else ""
