@@ -1,7 +1,4 @@
-from typing import cast
-
 from ..api.nanobanana_2_api import KieNanoBanana2API
-from ..log import _log
 
 
 class KieNanoBanana2Node:
@@ -55,14 +52,7 @@ class KieNanoBanana2Node:
         nanobanana.set_payload(payload)
 
         nanobanana.create_task()
-        result = cast(dict, nanobanana.wait_for_task_completion())
+        image: str = nanobanana.get_image_url()
+        print("NanoBanana2 API result:", image)
 
-        print("Final result from NanoBanana2 API:", result)
-        image: str = result.get("resultUrls", [""])[0] if result else ""
-
-        _log("Received result from NanoBanana2 API:", image)
-
-        # return (
-        #     "https://fsn1.your-objectstorage.com/n8n-bucket/ytb/records/23/1773654208342-mpc70m8ovfp.png",
-        # )
         return (image,)

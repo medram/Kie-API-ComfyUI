@@ -60,8 +60,8 @@ class KieNanoBanana2API(KieAPI):
         )  # This will raise a validation error if the payload is invalid
         self._payload = valid_payload
 
-    def get_result(self) -> str:
+    def get_image_url(self) -> str:
         """Returns the generated image URL."""
-        print(self._result)
-        return ""
-        # return self._result[0] if self._result else ""
+        # Wait for the task to complete and get the result
+        result = self.wait_for_task_completion()
+        return result.get("resultUrls", [""])[0] if result else ""
