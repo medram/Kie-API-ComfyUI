@@ -4,6 +4,7 @@ import time
 from typing import Any, Literal
 
 import requests
+from comfy.utils import ProgressBar
 from pydantic import BaseModel, PrivateAttr
 
 from ..log import _log
@@ -74,13 +75,21 @@ class KieAPI(BaseModel):
         if self._task_id is None:
             raise ValueError("Task ID is not set. Create a task first.")
 
+        pbar = ProgressBar(100)
+        pbar.update_absolute(5, 100)
+        poll_count = 0
+
         time.sleep(5)  # Initial delay before polling
 
         while self._status == "pending" or self._status is None:
             self.get_task_status()
             _log(f"Task {self._task_id}: generating...")
+            poll_count += 1
+            progress = min(5 + poll_count * 5, 95)
+            pbar.update_absolute(progress, 100)
             time.sleep(5)  # Poll every 5 seconds
 
+        pbar.update_absolute(100, 100)
         return self._result
 
     # def get_result(self) -> dict | list | None:

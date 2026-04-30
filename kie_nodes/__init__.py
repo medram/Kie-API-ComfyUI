@@ -1,13 +1,15 @@
-from .nodes import KieImageLoaderNode, KieImagePreviewNode, KieNanoBanana2Node
+from .nodes import KieImageLoaderNode, KieImagePreviewNode, KieNanoBanana2Node, TextNode
 
 NODE_CLASS_MAPPINGS = {
-    "KieNanoBanana2": KieNanoBanana2Node,
+    "KieNanoBanana2Node": KieNanoBanana2Node,
     "KieImagePreviewNode": KieImagePreviewNode,
     "KieImageLoaderNode": KieImageLoaderNode,
+    "TextNode": TextNode,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "KieNanoBanana2": "KieNanoBanana2",
+    "TextNode": "Text Node",
+    "KieNanoBanana2Node": "Kie NanoBanana 2",
     "KieImagePreviewNode": "Kie Image Preview",
     "KieImageLoaderNode": "Kie Image Loader",
 }
