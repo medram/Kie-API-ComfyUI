@@ -53,6 +53,5 @@ class KieNanoBanana2Node:
 
         nanobanana.create_task()
         image: str = nanobanana.get_image_url()
-        print("NanoBanana2 API result:", image)
 
         return (image,)

@@ -1,6 +1,7 @@
 import io
 import os
 import uuid
+from urllib.parse import urlparse
 
 import folder_paths
 import requests
@@ -29,6 +30,13 @@ class KieImagePreviewNode:
         images_results = []
 
         for image in images:
+            # Validate the image URL
+            if not image or not image.strip():
+                continue
+            parsed = urlparse(image)
+            if parsed.scheme not in ("http", "https") or not parsed.netloc:
+                raise ValueError(f"Invalid image URL: '{image}'")
+
             response = requests.get(image, timeout=30)
             response.raise_for_status()
 
