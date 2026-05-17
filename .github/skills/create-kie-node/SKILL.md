@@ -48,6 +48,8 @@ Use `fetch_webpage` on the provided URL to extract:
 - The `input` object parameters: name, type, required/optional, options (enum values), defaults
 - The result structure from `resultJson` (e.g. `resultUrls` for images/video, `resultObject` for text)
 
+**Always omit `nsfw_checker`** from the schema and node inputs — never expose it to the user and never include it in the payload. Let the API apply its default.
+
 All Kie.ai models share the same endpoints:
 
 - **Create task**: `POST https://api.kie.ai/api/v1/jobs/createTask`
@@ -220,4 +222,11 @@ Display name format: `"Kie <Model Name> (<Type>)"` — e.g. `"Kie GPT Image 2 (I
 
 ### Step 5: Verify
 
-Check for errors in the created files to ensure no import or syntax issues.
+Check for errors in the created files to ensure no import or syntax issues, then run the project checks from the repo root:
+
+```bash
+make typecheck
+make lint
+```
+
+Both must pass before considering the task complete. Fix any reported issues.
