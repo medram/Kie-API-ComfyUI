@@ -5,7 +5,10 @@ from abc import abstractmethod
 from typing import Any, Literal
 
 import requests
-from comfy.utils import ProgressBar
+from comfy.model_management import (  # type: ignore
+    throw_exception_if_processing_interrupted,
+)
+from comfy.utils import ProgressBar  # type: ignore
 from pydantic import BaseModel, PrivateAttr
 
 from ..log import _log
@@ -26,6 +29,7 @@ class KieAPI(BaseModel):
     _task_id: str | None = PrivateAttr(default=None)
     _status: Literal["pending", "success", "failed"] | None = PrivateAttr(default=None)
     _result: dict[str, Any] | None = PrivateAttr(default=None)
+    _fail_msg: str | None = PrivateAttr(default=None)
 
     def create_task(self):
         if self._payload is None:
@@ -69,6 +73,7 @@ class KieAPI(BaseModel):
                 self._status = "pending"
             elif data.get("state") == "fail":
                 self._status = "failed"
+                self._fail_msg = data.get("failMsg") or "Task failed (unknown reason)"
 
         return req.json()
 
@@ -83,6 +88,7 @@ class KieAPI(BaseModel):
         time.sleep(5)  # Initial delay before polling
 
         while self._status == "pending" or self._status is None:
+            throw_exception_if_processing_interrupted()
             self.get_task_status()
             _log(f"[{self.node_name()}]: Task {self._task_id}: generating...")
             poll_count += 1
@@ -90,7 +96,15 @@ class KieAPI(BaseModel):
             pbar.update_absolute(progress, 100)
             time.sleep(5)  # Poll every 5 seconds
 
+        _log(
+            f"[{self.node_name()}]: Task {self._task_id} completed with status: {self._status}"
+        )
+
         pbar.update_absolute(100, 100)
+
+        if self._status == "failed":
+            raise RuntimeError(f"[{self.node_name()}] Task failed: {self._fail_msg}")
+
         return self._result
 
     @abstractmethod
