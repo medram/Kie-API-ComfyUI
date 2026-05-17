@@ -1,6 +1,7 @@
-from typing import get_args
+from typing import Any, get_args
 
 from ..api.nanobanana_2_api import InputSchema, KieNanoBanana2API
+from .utils import save_preview_image
 
 _fields = InputSchema.model_fields
 
@@ -16,7 +17,7 @@ class KieNanoBanana2Node:
                 ),
             },
             "optional": {
-                "image": ("IMAGE_URL",),
+                "images": ("IMAGE_URL",),
                 "resolution": (
                     list(get_args(_fields["resolution"].annotation)),
                     {"default": _fields["resolution"].default},
@@ -25,6 +26,7 @@ class KieNanoBanana2Node:
                     list(get_args(_fields["aspect_ratio"].annotation)),
                     {"default": _fields["aspect_ratio"].default},
                 ),
+                "preview": ("BOOLEAN", {"default": True}),
             },
         }
 
@@ -32,11 +34,10 @@ class KieNanoBanana2Node:
     RETURN_NAMES = ("Image",)
     FUNCTION = "generate"
     CATEGORY = "Kie API Nodes/Images"
-    # OUTPUT_IS_LIST = (True,)
-    # INPUT_IS_LIST = True  # <--- THIS IS THE KEY
+    OUTPUT_NODE = True
 
-    def generate(self, *args, **kwargs) -> tuple[str]:
-        # Placeholder implementation - replace with actual API call
+    def generate(self, *args, **kwargs) -> tuple[str] | dict[str, Any]:
+        preview: bool = kwargs.pop("preview", True)
         payload = kwargs
 
         nanobanana = KieNanoBanana2API()
@@ -45,4 +46,9 @@ class KieNanoBanana2Node:
         nanobanana.create_task()
         image: str = nanobanana.get_image_url()
 
-        return (image,)
+        result: dict = {"result": (image,)}
+
+        if preview and image:
+            result["ui"] = {"images": [save_preview_image(image)]}
+
+        return result

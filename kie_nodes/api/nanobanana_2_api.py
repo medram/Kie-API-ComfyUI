@@ -3,6 +3,7 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 from .base import KieAPI
+from .types import ImageUrls
 
 AspectRatio = Literal[
     "1:1",
@@ -35,9 +36,10 @@ class InputSchema(BaseModel):
         default="1K",
         description="Resolution of the output image, e.g., '1K', '2K', '4K'.",
     )
-    image_input: list[str] = Field(
+    image_input: ImageUrls = Field(
         default_factory=list,
-        max_items=14,
+        validation_alias="images",
+        max_length=14,
         description="Base64-encoded image input or URL to the image.",
     )
     output_format: Literal["png", "jpg"] = Field(
@@ -59,7 +61,7 @@ class KieNanoBanana2API(KieAPI):
 
         # Validate and convert the input payload to the NanoBanana2Payload schema
         valid_payload = NanoBanana2Payload(
-            input=payload
+            input=InputSchema(**payload)
         )  # This will raise a validation error if the payload is invalid
         self._payload = valid_payload
 
