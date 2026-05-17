@@ -1,4 +1,5 @@
 from .kie_crisp_upscale_node import KieCrispUpscaleNode
+from .kie_elevenlabs_tts_node import KieElevenLabsTTSNode
 from .kie_gpt_image_2_node import KieGptImage2Node
 from .kie_grok_imagine_i2v_node import KieGrokImagineI2VNode
 from .kie_grok_imagine_t2i_node import KieGrokImagineT2INode
@@ -17,6 +18,7 @@ from .kie_qwen2_image_edit_node import KieQwen2ImageEditNode
 from .kie_seedance_1_5_pro_node import KieSeedance15ProNode
 from .kie_seedance_2_node import KieSeedance2Node
 from .kie_seedream_4_5_node import KieSeedream45Node
+from .kie_seedream_5_lite_node import KieSeedream5LiteNode
 from .kie_suno_node import KieSunoNode
 from .kie_text_node import TextNode
 from .kie_veo3_node import KieVeo3Node
@@ -27,6 +29,7 @@ from .kie_z_image_node import KieZImageNode
 
 __all__ = [
     "KieCrispUpscaleNode",
+    "KieElevenLabsTTSNode",
     "KieGptImage2Node",
     "KieGrokImagineI2VNode",
     "KieGrokImagineT2INode",
@@ -45,6 +48,7 @@ __all__ = [
     "KieSeedance2Node",
     "KieQwen2ImageEditNode",
     "KieSeedream45Node",
+    "KieSeedream5LiteNode",
     "KieVeo3Node",
     "KieWan22AnimateNode",
     "KieWan26Node",
