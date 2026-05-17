@@ -30,13 +30,15 @@ class KieAPI(BaseModel):
     _status: Literal["pending", "success", "failed"] | None = PrivateAttr(default=None)
     _result: dict[str, Any] | None = PrivateAttr(default=None)
     _fail_msg: str | None = PrivateAttr(default=None)
+    _task_endpoint: str = "https://api.kie.ai/api/v1/jobs/create"
+    _task_status_endpoint: str = "https://api.kie.ai/api/v1/jobs/recordInfo"
 
     def create_task(self):
         if self._payload is None:
             raise ValueError("Payload must be set before creating a task.")
 
         req = requests.post(
-            "https://api.kie.ai/api/v1/jobs/createTask",
+            self._task_endpoint,
             json=self._payload.model_dump(),
             headers={"Authorization": f"Bearer {get_api_key()}"},
         )
@@ -57,7 +59,7 @@ class KieAPI(BaseModel):
             raise ValueError("Task ID is not set. Create a task first.")
 
         req = requests.get(
-            f"https://api.kie.ai/api/v1/jobs/recordInfo?taskId={self._task_id}",
+            f"{self._task_status_endpoint}?taskId={self._task_id}",
             headers={"Authorization": f"Bearer {get_api_key()}"},
         )
         req.raise_for_status()
