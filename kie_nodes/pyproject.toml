@@ -5,6 +5,20 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "mypy>=2.1.0",
+    "numpy>=2.4.5",
     "pydantic>=2.13.3",
     "requests>=2.33.1",
+    "ruff>=0.15.13",
+    "types-pillow>=10.2.0",
+    "types-requests>=2.33.0",
 ]
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = false
+warn_unused_ignores = false
+
+[[tool.mypy.overrides]]
+module = ["folder_paths", "torch.*", "comfy.*"]
+ignore_missing_imports = true
