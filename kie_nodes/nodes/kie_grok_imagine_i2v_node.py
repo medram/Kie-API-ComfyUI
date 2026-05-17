@@ -1,0 +1,72 @@
+from typing import Any, get_args
+
+from ..api.grok_imagine_i2v_api import InputSchema, KieGrokImagineI2VAPI
+
+_fields = InputSchema.model_fields
+
+
+class KieGrokImagineI2VNode:
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "prompt": (
+                    "STRING",
+                    {"multiline": True, "default": _fields["prompt"].default},
+                ),
+            },
+            "optional": {
+                "images": ("IMAGE_URL",),
+                "task_id": (
+                    "STRING",
+                    {"default": _fields["task_id"].default},
+                ),
+                "index": (
+                    "INT",
+                    {
+                        "default": _fields["index"].default,
+                        "min": 0,
+                        "max": 5,
+                        "step": 1,
+                    },
+                ),
+                "mode": (
+                    list(get_args(_fields["mode"].annotation)),
+                    {"default": _fields["mode"].default},
+                ),
+                "aspect_ratio": (
+                    list(get_args(_fields["aspect_ratio"].annotation)),
+                    {"default": _fields["aspect_ratio"].default},
+                ),
+                "duration": (
+                    "INT",
+                    {
+                        "default": _fields["duration"].default,
+                        "min": 6,
+                        "max": 30,
+                        "step": 1,
+                    },
+                ),
+                "resolution": (
+                    list(get_args(_fields["resolution"].annotation)),
+                    {"default": _fields["resolution"].default},
+                ),
+            },
+        }
+
+    RETURN_TYPES = ("VIDEO_URL",)
+    RETURN_NAMES = ("Video",)
+    FUNCTION = "generate"
+    CATEGORY = "Kie API Nodes/Videos"
+    OUTPUT_NODE = True
+
+    def generate(self, *args, **kwargs) -> dict[str, Any]:
+        payload = kwargs
+
+        api = KieGrokImagineI2VAPI()
+        api.set_payload(payload)
+
+        api.create_task()
+        video: str = api.get_video_url()
+
+        return {"result": (video,)}
