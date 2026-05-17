@@ -17,10 +17,12 @@ class KieImagePreviewNode:
             }
         }
 
-    RETURN_TYPES = ()
+    RETURN_TYPES = ("IMAGE_URL",)
+    RETURN_NAMES = ("images",)
     FUNCTION = "preview"
     CATEGORY = "Kie API Nodes/Images"
     OUTPUT_NODE = True
+    OUTPUT_IS_LIST = (True,)
     INPUT_IS_LIST = True
 
     def preview(self, images: tuple[str]):
@@ -51,4 +53,4 @@ class KieImagePreviewNode:
                 {"filename": filename, "subfolder": "", "type": "temp"}
             )
 
-        return {"ui": {"images": images_results}}
+        return {"ui": {"images": images_results}, "result": (images,)}

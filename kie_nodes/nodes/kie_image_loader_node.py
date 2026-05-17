@@ -17,6 +17,7 @@ class KieImageLoaderNode:
             }
         }
 
+    DESCRIPTION = "Downloads images from URLs and converts them into image tensors for use with other ComfyUI nodes."
     RETURN_TYPES = ("IMAGE",)
     RETURN_NAMES = ("Images",)
     FUNCTION = "load"
