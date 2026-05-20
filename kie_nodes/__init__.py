@@ -10,6 +10,8 @@ from .nodes import (
     KieHappyHorseVideoEditNode,
     KieImageLoaderNode,
     KieImagePreviewNode,
+    KieImageSelectUploadNode,
+    KieImageUploadNode,
     KieKling26VideoNode,
     KieKling30VideoNode,
     KieKlingAiAvatarNode,
@@ -57,6 +59,8 @@ NODE_CLASS_MAPPINGS = {
     "KieSunoNode": KieSunoNode,
     "KieImagePreviewNode": KieImagePreviewNode,
     "KieImageLoaderNode": KieImageLoaderNode,
+    "KieImageSelectUploadNode": KieImageSelectUploadNode,
+    "KieImageUploadNode": KieImageUploadNode,
     "TextNode": TextNode,
 }
 
@@ -88,7 +92,9 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "KieWan27Node": "Kie Wan 2.7",
     "KieSunoNode": "Kie Suno Music",
     "KieImagePreviewNode": "Kie Image Preview",
-    "KieImageLoaderNode": "Kie Image Loader",
+    "KieImageLoaderNode": "Kie Image (URLs to Tensors)",
+    "KieImageSelectUploadNode": "Kie Image Loader",
+    "KieImageUploadNode": "Kie Image (Tensors to URLs)",
 }
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]

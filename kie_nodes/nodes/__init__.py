@@ -7,8 +7,10 @@ from .kie_grok_imagine_t2v_node import KieGrokImagineT2VNode
 from .kie_happyhorse_node import KieHappyHorseNode
 from .kie_happyhorse_r2v_node import KieHappyHorseR2VNode
 from .kie_happyhorse_video_edit_node import KieHappyHorseVideoEditNode
-from .kie_image_loader_node import KieImageLoaderNode
+from .kie_image_loader_node import KieImageSelectUploadNode
 from .kie_image_preview_node import KieImagePreviewNode
+from .kie_image_tensors_to_urls_node import KieImageUploadNode
+from .kie_image_urls_to_tensors_node import KieImageLoaderNode
 from .kie_kling_2_6_video_node import KieKling26VideoNode
 from .kie_kling_3_0_video_node import KieKling30VideoNode
 from .kie_kling_ai_avatar_node import KieKlingAiAvatarNode
@@ -39,6 +41,8 @@ __all__ = [
     "KieGrokImagineT2VNode",
     "KieImageLoaderNode",
     "KieImagePreviewNode",
+    "KieImageSelectUploadNode",
+    "KieImageUploadNode",
     "KieKling26VideoNode",
     "KieKling30VideoNode",
     "KieKlingAiAvatarNode",

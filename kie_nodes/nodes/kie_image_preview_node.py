@@ -20,7 +20,7 @@ class KieImagePreviewNode:
     RETURN_TYPES = ("IMAGE_URL",)
     RETURN_NAMES = ("images",)
     FUNCTION = "preview"
-    CATEGORY = "Kie API Nodes/Images"
+    CATEGORY = "Kie API Nodes/Utility Nodes"
     OUTPUT_NODE = True
     OUTPUT_IS_LIST = (True,)
     INPUT_IS_LIST = True
