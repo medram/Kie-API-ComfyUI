@@ -14,14 +14,56 @@ from pydantic import BaseModel, PrivateAttr
 from ..log import _log
 
 
+def _read_setting(key: str) -> str:
+    """Read a value from ComfyUI's user settings file."""
+    try:
+        import folder_paths  # type: ignore
+
+        user_dir = os.path.join(folder_paths.base_path, "user")
+        settings_file = os.path.join(user_dir, "default", "comfy.settings.json")
+        if os.path.isfile(settings_file):
+            with open(settings_file, "r") as f:
+                settings = json.load(f)
+            return settings.get(key, "")
+    except Exception:
+        pass
+    return ""
+
+
 def get_api_key() -> str:
+    # 1. Environment variable takes priority (Docker / headless / CI)
     api_key: str = os.environ.get("KIE_API_KEY", "")
-    if not api_key:
-        raise ValueError(
-            "KIE_API_KEY environment variable is not set. "
-            "Set it to your kie.ai API key before using this node."
-        )
-    return api_key
+    if api_key:
+        return api_key
+
+    # 2. Fall back to ComfyUI Settings panel value
+    api_key = _read_setting("kie.api_key")
+    if api_key:
+        return api_key
+
+    raise ValueError(
+        "KIE API key is not configured. "
+        "Set it in ComfyUI Settings (Kie API > API Key) "
+        "or via the KIE_API_KEY environment variable."
+    )
+
+
+def get_openrouter_api_key() -> str:
+    # 1. Environment variable takes priority (Docker / headless / CI)
+    api_key: str = os.environ.get("OPENROUTER_API_KEY", "")
+    if api_key:
+        return api_key
+
+    # 2. Fall back to ComfyUI Settings panel value
+    api_key = _read_setting("kie.openrouter_api_key")
+    if api_key:
+        return api_key
+
+    raise ValueError(
+        "OpenRouter API key is not configured. "
+        "Set it in ComfyUI Settings (Kie API > OpenRouter API Key) "
+        "or via the OPENROUTER_API_KEY environment variable."
+    )
 
 
 class KieAPI(BaseModel):

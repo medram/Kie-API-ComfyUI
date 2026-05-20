@@ -16,7 +16,9 @@ from .kie_kling_3_0_video_node import KieKling30VideoNode
 from .kie_kling_ai_avatar_node import KieKlingAiAvatarNode
 from .kie_nanobanana_2_node import KieNanoBanana2Node
 from .kie_nanobanana_pro_node import KieNanoBananaProNode
+from .kie_openrouter_node import KieOpenRouterNode
 from .kie_qwen2_image_edit_node import KieQwen2ImageEditNode
+from .kie_save_image_node import KieSaveImageNode
 from .kie_seedance_1_5_pro_node import KieSeedance15ProNode
 from .kie_seedance_2_node import KieSeedance2Node
 from .kie_seedream_4_5_node import KieSeedream45Node
@@ -24,6 +26,7 @@ from .kie_seedream_5_lite_node import KieSeedream5LiteNode
 from .kie_suno_node import KieSunoNode
 from .kie_text_node import TextNode
 from .kie_veo3_node import KieVeo3Node
+from .kie_video_preview_node import KieVideoPreviewNode
 from .kie_wan_22_animate_node import KieWan22AnimateNode
 from .kie_wan_26_node import KieWan26Node
 from .kie_wan_27_node import KieWan27Node
@@ -43,17 +46,20 @@ __all__ = [
     "KieImagePreviewNode",
     "KieImageSelectUploadNode",
     "KieImageUploadNode",
+    "KieSaveImageNode",
     "KieKling26VideoNode",
     "KieKling30VideoNode",
     "KieKlingAiAvatarNode",
     "KieNanoBanana2Node",
     "KieNanoBananaProNode",
+    "KieOpenRouterNode",
     "KieSeedance15ProNode",
     "KieSeedance2Node",
     "KieQwen2ImageEditNode",
     "KieSeedream45Node",
     "KieSeedream5LiteNode",
     "KieVeo3Node",
+    "KieVideoPreviewNode",
     "KieWan22AnimateNode",
     "KieWan26Node",
     "KieWan27Node",

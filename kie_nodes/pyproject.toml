@@ -20,5 +20,5 @@ warn_return_any = false
 warn_unused_ignores = false
 
 [[tool.mypy.overrides]]
-module = ["folder_paths", "torch.*", "comfy.*"]
+module = ["folder_paths", "torch.*", "comfy.*", "aiohttp", "aiohttp.*", "server"]
 ignore_missing_imports = true
