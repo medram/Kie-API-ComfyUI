@@ -29,24 +29,7 @@ class InputSchema(BaseModel):
         validation_alias="images",
         description=(
             "URL of the reference image for video generation (only one image is "
-            "supported). Do not provide both image_urls and task_id at the same time."
-        ),
-    )
-    task_id: str = Field(
-        default="",
-        description=(
-            "Task ID of a previously Grok-generated image. Use with index to "
-            "select a specific image. Do not combine with image_urls."
-        ),
-        max_length=100,
-    )
-    index: int = Field(
-        default=0,
-        ge=0,
-        le=5,
-        description=(
-            "Which image to use from the task_id generation (0-5). Ignored when "
-            "image_urls is provided."
+            "supported)."
         ),
     )
     mode: Mode = Field(

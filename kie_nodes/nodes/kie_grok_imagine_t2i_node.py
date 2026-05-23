@@ -30,12 +30,13 @@ class KieGrokImagineT2INode:
         }
 
     RETURN_TYPES = ("IMAGE_URL",)
-    RETURN_NAMES = ("Image",)
+    RETURN_NAMES = ("Images",)
     FUNCTION = "generate"
     CATEGORY = "Kie API Nodes/Images"
+    OUTPUT_IS_LIST = (True,)
     OUTPUT_NODE = True
 
-    def generate(self, *args, **kwargs) -> tuple[str] | dict[str, Any]:
+    def generate(self, *args, **kwargs) -> tuple[list[str]] | dict[str, Any]:
         preview: bool = kwargs.pop("preview", True)
         payload = kwargs
 
@@ -43,11 +44,11 @@ class KieGrokImagineT2INode:
         api.set_payload(payload)
 
         api.create_task()
-        image: str = api.get_image_url()
+        images: list[str] = api.get_image_urls()
 
-        result: dict = {"result": (image,)}
+        result: dict = {"result": (images,)}
 
-        if preview and image:
-            result["ui"] = {"images": [save_preview_image(image)]}
+        if preview and images:
+            result["ui"] = {"images": [save_preview_image(url) for url in images]}
 
         return result

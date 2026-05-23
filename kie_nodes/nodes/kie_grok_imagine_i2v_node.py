@@ -17,19 +17,6 @@ class KieGrokImagineI2VNode:
             },
             "optional": {
                 "images": ("IMAGE_URL",),
-                "task_id": (
-                    "STRING",
-                    {"default": _fields["task_id"].default},
-                ),
-                "index": (
-                    "INT",
-                    {
-                        "default": _fields["index"].default,
-                        "min": 0,
-                        "max": 5,
-                        "step": 1,
-                    },
-                ),
                 "mode": (
                     list(get_args(_fields["mode"].annotation)),
                     {"default": _fields["mode"].default},

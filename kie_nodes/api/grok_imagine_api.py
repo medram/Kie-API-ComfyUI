@@ -44,7 +44,7 @@ class KieGrokImagineAPI(KieAPI):
         valid_payload = GrokImaginePayload(input=InputSchema(**payload))
         self._payload = valid_payload
 
-    def get_image_url(self) -> str:
-        """Returns the generated image URL."""
+    def get_image_urls(self) -> list[str]:
+        """Returns all generated image URLs."""
         result = self.wait_for_task_completion()
-        return result.get("resultUrls", [""])[0] if result else ""
+        return result.get("resultUrls", []) if result else []

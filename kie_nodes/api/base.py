@@ -72,12 +72,14 @@ class KieAPI(BaseModel):
     _status: Literal["pending", "success", "failed"] | None = PrivateAttr(default=None)
     _result: dict[str, Any] | None = PrivateAttr(default=None)
     _fail_msg: str | None = PrivateAttr(default=None)
-    _task_endpoint: str = "https://api.kie.ai/api/v1/jobs/create"
+    _task_endpoint: str = "https://api.kie.ai/api/v1/jobs/createTask"
     _task_status_endpoint: str = "https://api.kie.ai/api/v1/jobs/recordInfo"
 
     def create_task(self):
         if self._payload is None:
             raise ValueError("Payload must be set before creating a task.")
+
+        _log(f"[{self.node_name()}] Payload: {self._payload.model_dump()}")
 
         req = requests.post(
             self._task_endpoint,
@@ -87,9 +89,21 @@ class KieAPI(BaseModel):
 
         req.raise_for_status()
         if req.status_code == 200:
-            self._task_id = req.json().get("data", {}).get("taskId")
+            body = req.json()
+
+            # Surface API-level errors (e.g. {"code":500,"msg":"File type not supported"})
+            api_code = body.get("code")
+            if api_code is not None and int(api_code) != 200:
+                api_msg = body.get("msg") or body.get("message") or "Unknown API error"
+                raise ValueError(
+                    f"[{self.node_name()}] API error ({api_code}): {api_msg}"
+                )
+
+            self._task_id = (body.get("data") or {}).get("taskId")
             if not self._task_id:
-                raise ValueError(f"API did not return a taskId. Response: {req.text}")
+                raise ValueError(
+                    f"[{self.node_name()}] API did not return a taskId. Response: {req.text}"
+                )
         elif req.status_code in (401, 403):
             self._status = "failed"
             _log(f"[{self.node_name()}]: Unauthorized: Check your API key.")

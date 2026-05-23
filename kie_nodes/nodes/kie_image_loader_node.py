@@ -57,3 +57,27 @@ class KieImageSelectUploadNode:
             url += f"&subfolder={subfolder}"
 
         return (url,)
+
+
+class KieImagePickerNode:
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "images": ("IMAGE_URL",),
+                "index": ("INT", {"default": 0, "min": 0, "max": 99, "step": 1}),
+            },
+        }
+
+    INPUT_IS_LIST = True
+    RETURN_TYPES = ("IMAGE_URL",)
+    RETURN_NAMES = ("Image",)
+    FUNCTION = "pick"
+    CATEGORY = "Kie API Nodes/Utility Nodes"
+
+    def pick(self, images: list[str], index: list[int]) -> tuple[str]:
+        idx = index[0]
+        if not images:
+            return ("",)
+        idx = max(0, min(idx, len(images) - 1))
+        return (images[idx],)

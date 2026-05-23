@@ -123,15 +123,7 @@ class KieOpenRouterNode:
 
     @classmethod
     def VALIDATE_INPUTS(cls, **kwargs: Any) -> bool | str:
-        model: str = kwargs.get("model", "")
-        prompt: str = kwargs.get("prompt", "")
         image_url: str | None = kwargs.get("image_url")
-
-        if not model or not model.strip():
-            return "Model must be selected."
-
-        if not prompt or not prompt.strip():
-            return "Prompt cannot be empty."
 
         if image_url is not None and isinstance(image_url, str) and image_url.strip():
             url = image_url.strip()
@@ -248,7 +240,8 @@ class KieOpenRouterNode:
                 f"[OpenRouter] No choices returned for model {model}. Response: {data}"
             )
 
-        response_text: str = choices[0].get("message", {}).get("content", "")
+        message = choices[0].get("message") or {}
+        response_text: str = message.get("content") or ""
 
         usage = data.get("usage", {})
         _log(
